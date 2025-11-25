@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NuJo - post</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            max-width: 1500px;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .left-sidebar {
+            padding: 20px;
+            border-right: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            box-shadow: none;
+            height: 100%;
+            overflow-y: hidden;
+        }
+
+        .left-sidebar .logo {
+            margin-bottom: 30px;
+            flex-shrink: 0;
+        }
+
+        .left-sidebar .logo a {
+            display: block;
+            text-decoration: none;
+        }
+
+        .left-sidebar .logo img {
+            width: 120px;
+            height: auto;
+            transition: transform 0.2s ease;
+        }
+
+        .left-sidebar .logo a:hover img {
+            transform: scale(1.05);
+        }
+
+        .left-sidebar .nav-links {
+            list-style: none;
+            flex-grow: 1;
+            margin-top: 20px;
+            overflow-y: auto;
+        }
+
+        .left-sidebar .nav-links::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .left-sidebar .nav-links::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 10px;
+        }
+
+        .left-sidebar .nav-links li {
+            margin-bottom: 15px;
+        }
+
+        .left-sidebar .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .left-sidebar .nav-links a i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .left-sidebar .nav-links a.active,
+        .left-sidebar .nav-links a:hover {
+            background-color: #00cba3;
+            color: #fff;
+        }
+
+        .left-sidebar .profile-card-link {
+            text-decoration: none;
+            display: block;
+        }
+
+        .left-sidebar .profile-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            margin-top: 15px;
+            flex-shrink: 0;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            cursor: pointer;
+        }
+
+        .left-sidebar .profile-card:hover {
+            background-color: #e8f5f3;
+            transform: translateY(-2px);
+        }
+
+        .left-sidebar .profile-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid #eee;
+        }
+
+        .left-sidebar .profile-info h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .left-sidebar .profile-info p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .main-content {
+            background-color: #f5f5f5;
+            padding: 30px 40px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .main-content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .main-content h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+
+        .filter-icon {
+            background-color: #fff;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.2s ease;
+        }
+
+        .filter-icon:hover {
+            background-color: #00cba3;
+            color: #fff;
+        }
+
+        .filter-icon i {
+            font-size: 1.2rem;
+            color: inherit;
+        }
+
+        .post-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .post-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: #fff;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .post-item:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .post-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .post-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .post-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .post-item:hover .post-overlay {
+            opacity: 1;
+        }
+
+        .post-user-info {
+            display: flex;
+            align-items: center;
+            gap: 5px; 
+        }
+
+        .post-user-avatar {
+            width: 45px !important; 
+            height: 45px !important;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+
+        .post-user-details {
+            color: #fff;
+        }
+
+        .post-user-details h4 {
+            font-size: 0.95rem; 
+            font-weight: 600;
+            margin: 0;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .post-user-details p {
+            font-size: 0.8rem; 
+            margin: 0;
+            opacity: 0.9;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .post-interactions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .interaction-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .interaction-item i {
+            font-size: 1.1rem;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            padding-top: 50px;
+        }
+
+        .modal-content {
+            background-color: #fff;
+            margin: 5% auto;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 1000px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            max-height: 90vh;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal-image-container {
+            flex: 3;
+            position: relative;
+            background-color: #000;
+        }
+
+        .modal-image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            border-top-left-radius: 15px;
+            border-bottom-left-radius: 15px;
+        }
+
+        .modal-details {
+            flex: 2;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #eee;
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-header img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .modal-header h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .modal-header p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .modal-caption {
+            padding: 15px 0;
+            flex-grow: 1;
+            overflow-y: auto;
+            line-height: 1.6;
+        }
+
+        .modal-caption::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .modal-caption::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 10px;
+        }
+
+        .modal-interactions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .modal-interaction-items {
+            display: flex;
+            gap: 20px;
+        }
+
+        .modal-interaction-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #555;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            position: relative;
+        }
+
+        .modal-interaction-item:hover {
+            color: #00cba3;
+        }
+
+        .modal-interaction-item.liked {
+            color: #00cba3;
+        }
+
+        .modal-interaction-item i {
+            font-size: 1.3rem;
+        }
+
+        .modal-date {
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+
+        .close {
+            color: #fff;
+            position: absolute;
+            top: 20px;
+            right: 35px;
+            font-size: 30px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            text-shadow: 0 0 5px rgba(0, 0, 0, 0.8);
+            z-index: 10;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #00cba3;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        @keyframes particle-float {
+            to {
+                transform: translateY(-30px);
+                opacity: 0;
+            }
+        }
+
+        .like-particle {
+            position: absolute;
+            color: #00cba3;
+            font-size: 0.8rem;
+            pointer-events: none;
+            animation: particle-float 1s ease-out forwards;
+        }
+        
+        @media (max-width: 1200px) {
+            .post-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-container {
+                grid-template-columns: 80px 1fr;
+            }
+
+            .left-sidebar {
+                padding: 20px 10px;
+            }
+
+            .left-sidebar .logo a {
+                display: flex;
+                justify-content: center;
+            }
+
+            .left-sidebar .logo img {
+                width: 80px;
+            }
+
+            .left-sidebar .nav-links a span {
+                display: none;
+            }
+
+            .left-sidebar .nav-links a {
+                justify-content: center;
+                padding: 10px 0;
+            }
+
+            .left-sidebar .nav-links a i {
+                margin-right: 0;
+            }
+
+            .left-sidebar .profile-card {
+                display: none;
+            }
+
+            .post-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .modal-content {
+                width: 90%;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .modal-content {
+                flex-direction: column;
+                max-width: 500px;
+                margin: 20px auto;
+                max-height: 95vh;
+            }
+            
+            .modal-image-container {
+                min-height: 300px;
+            }
+            
+            .modal-image-container img {
+                border-radius: 15px 15px 0 0;
+                object-fit: cover;
+            }
+            
+            .modal-details {
+                border-left: none;
+                border-top: 1px solid #eee;
+            }
+            
+            .close {
+                color: #333;
+                right: 15px;
+                top: 10px;
+                text-shadow: none;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                box-shadow: none;
+            }
+
+            body {
+                padding: 0;
+                background-color: #fff;
+            }
+
+            .left-sidebar {
+                border-right: none;
+                padding: 15px;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                border-bottom: 1px solid #eee;
+                height: auto;
+            }
+
+            .left-sidebar .logo {
+                margin-bottom: 0;
+            }
+
+            .left-sidebar .logo a {
+                display: block;
+            }
+
+            .left-sidebar .logo img {
+                width: 100px;
+            }
+
+            .left-sidebar .nav-links {
+                display: none;
+            }
+
+            .left-sidebar .profile-card {
+                display: none;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .post-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="left-sidebar">
+            <div class="logo">
+                <a href="home page.html">
+                    <img src="logo_nujo2.png" alt="NUJO Logo">
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li><a href="home page.html"><i class="fas fa-home"></i> <span>Home</span></a></li>
+                <li><a href="notif page.html"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
+                <li><a href="message page.html"><i class="fas fa-envelope"></i> <span>Messages</span></a></li>
+                <li><a href="post page.html" class="active"><i class="fas fa-image"></i> <span>Post</span></a></li>
+                <li><a href="newpost.html"><i class="fas fa-plus-circle"></i> <span>New Post</span></a></li>
+            </ul>
+            <a href="profile.html" class="profile-card-link">
+                <div class="profile-card">
+                    <img src="https://i.pravatar.cc/150?img=12" alt="Floyd Miles">
+                    <div class="profile-info">
+                        <h4>Floyd</h4>
+                        <p>@FloydMiles</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="main-content">
+            <div class="main-content-header">
+                <h2>Post</h2>
+                <div class="filter-icon">
+                    <i class="fas fa-sliders-h"></i>
+                </div>
+            </div>
+
+            <div class="post-grid">
+                <div class="post-item" data-post-index="0">
+                    <img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=400&h=600&fit=crop" alt="Indonesian Culture 1">
+                    <div class="post-overlay">
+                        <div class="post-user-info">
+                            <img src="https://i.pravatar.cc/150?img=12" alt="Floyd Miles" class="post-user-avatar">
+                            <div class="post-user-details">
+                                <h4>Floyd Miles</h4>
+                                <p>@FloydMiles</p>
+                            </div>
+                        </div>
+                        <div class="post-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span class="like-count">1.2K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span class="comment-count">234</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-item" data-post-index="1">
+                    <img src="https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&h=600&fit=crop" alt="Borobudur Temple">
+                    <div class="post-overlay">
+                        <div class="post-user-info">
+                            <img src="https://i.pravatar.cc/150?img=5" alt="Sarah Johnson" class="post-user-avatar">
+                            <div class="post-user-details">
+                                <h4>Sarah Johnson</h4>
+                                <p>@SarahJ</p>
+                            </div>
+                        </div>
+                        <div class="post-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span class="like-count">2.5K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span class="comment-count">456</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-item" data-post-index="2">
+                    <img src="https://images.unsplash.com/photo-1570789210967-2cac24afeb00?w=400&h=600&fit=crop" alt="Indonesian Temple">
+                    <div class="post-overlay">
+                        <div class="post-user-info">
+                            <img src="https://i.pravatar.cc/150?img=33" alt="Mike Chen" class="post-user-avatar">
+                            <div class="post-user-details">
+                                <h4>Mike Chen</h4>
+                                <p>@MikeC</p>
+                            </div>
+                        </div>
+                        <div class="post-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span class="like-count">890</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span class="comment-count">123</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-item" data-post-index="3">
+                    <img src="https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?w=400&h=600&fit=crop" alt="Bali Temple">
+                    <div class="post-overlay">
+                        <div class="post-user-info">
+                            <img src="https://i.pravatar.cc/150?img=47" alt="Amanda Lee" class="post-user-avatar">
+                            <div class="post-user-details">
+                                <h4>Amanda Lee</h4>
+                                <p>@AmandaL</p>
+                            </div>
+                        </div>
+                        <div class="post-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span class="like-count">3.1K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span class="comment-count">567</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-item" data-post-index="4">
+                    <img src="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=400&h=600&fit=crop" alt="Prambanan">
+                    <div class="post-overlay">
+                        <div class="post-user-info">
+                            <img src="https://i.pravatar.cc/150?img=68" alt="David Kim" class="post-user-avatar">
+                            <div class="post-user-details">
+                                <h4>David Kim</h4>
+                                <p>@DavidK</p>
+                            </div>
+                        </div>
+                        <div class="post-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span class="like-count">1.8K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span class="comment-count">345</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-item" data-post-index="5">
+                    <img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=400&h=600&fit=crop" alt="Indonesian Culture 2">
+                    <div class="post-overlay">
+                        <div class="post-user-info">
+                            <img src="https://i.pravatar.cc/150?img=20" alt="Emily Brown" class="post-user-avatar">
+                            <div class="post-user-details">
+                                <h4>Emily Brown</h4>
+                                <p>@EmilyB</p>
+                            </div>
+                        </div>
+                        <div class="post-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span class="like-count">2.2K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span class="comment-count">412</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-item" data-post-index="6">
+                    <img src="https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=400&h=600&fit=crop" alt="Traditional Dance">
+                    <div class="post-overlay">
+                        <div class="post-user-info">
+                            <img src="https://i.pravatar.cc/150?img=51" alt="James Wilson" class="post-user-avatar">
+                            <div class="post-user-details">
+                                <h4>James Wilson</h4>
+                                <p>@JamesW</p>
+                            </div>
+                        </div>
+                        <div class="post-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span class="like-count">4.3K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span class="comment-count">789</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="post-item" data-post-index="7">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=600&fit=crop" alt="Indonesian Statue">
+                    <div class="post-overlay">
+                        <div class="post-user-info">
+                            <img src="https://i.pravatar.cc/150?img=32" alt="Lisa Martinez" class="post-user-avatar">
+                            <div class="post-user-details">
+                                <h4>Lisa Martinez</h4>
+                                <p>@LisaM</p>
+                            </div>
+                        </div>
+                        <div class="post-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-thumbs-up"></i>
+                                <span class="like-count">1.5K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span class="comment-count">267</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="postModal" class="modal">
+        <span class="close">&times;</span>
+        <div class="modal-content">
+            <div class="modal-image-container">
+                <img id="modalImage" src="" alt="Post Image">
+            </div>
+            <div class="modal-details">
+                <div class="modal-header">
+                    <img id="modalUserAvatar" src="" alt="User Avatar">
+                    <div>
+                        <h4 id="modalUserName"></h4>
+                        <p id="modalUserHandle"></p>
+                    </div>
+                </div>
+                <div id="modalCaption" class="modal-caption"></div>
+                <div class="modal-interactions">
+                    <div class="modal-interaction-items">
+                        <div class="modal-interaction-item" id="modalLikeButton">
+                            <i class="far fa-thumbs-up"></i> <span id="modalLikeCount"></span>
+                        </div>
+                        <div class="modal-interaction-item">
+                            <i class="fas fa-comment"></i>
+                            <span id="modalCommentCount"></span>
+                        </div>
+                    </div>
+                    <span id="modalDate" class="modal-date"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Comment data for each post
+        const commentData = {
+            0: [
+                { author: 'John Doe', username: '@JohnD', avatar: 'https://i.pravatar.cc/150?img=15', text: 'Amazing culture! Love the colors.', time: '1h ago', likes: 24, liked: false },
+                { author: 'Jane Smith', username: '@JaneS', avatar: 'https://i.pravatar.cc/150?img=25', text: 'Indonesia is beautiful! 😍', time: '3h ago', likes: 15, liked: false }
+            ],
+            1: [
+                { author: 'Alex Wong', username: '@AlexW', avatar: 'https://i.pravatar.cc/150?img=35', text: 'Borobudur is on my bucket list!', time: '2h ago', likes: 42, liked: false },
+                { author: 'Maria Garcia', username: '@MariaG', avatar: 'https://i.pravatar.cc/150?img=40', text: 'Such a magnificent temple 🙏', time: '5h ago', likes: 31, liked: false }
+            ],
+            2: [
+                { author: 'Tom Brown', username: '@TomB', avatar: 'https://i.pravatar.cc/150?img=45', text: 'The architecture is stunning!', time: '4h ago', likes: 18, liked: false }
+            ],
+            3: [
+                { author: 'Sarah Lee', username: '@SarahL', avatar: 'https://i.pravatar.cc/150?img=50', text: 'Bali never disappoints!', time: '6h ago', likes: 52, liked: false },
+                { author: 'Mike Taylor', username: '@MikeT', avatar: 'https://i.pravatar.cc/150?img=55', text: 'Need to visit soon!', time: '7h ago', likes: 28, liked: false }
+            ],
+            4: [
+                { author: 'Emma Davis', username: '@EmmaD', avatar: 'https://i.pravatar.cc/150?img=60', text: 'Prambanan is magical ✨', time: '1d ago', likes: 36, liked: false }
+            ],
+            5: [
+                { author: 'Chris Johnson', username: '@ChrisJ', avatar: 'https://i.pravatar.cc/150?img=65', text: 'Beautiful traditional textiles!', time: '2d ago', likes: 41, liked: false }
+            ],
+            6: [
+                { author: 'Linda Martinez', username: '@LindaM', avatar: 'https://i.pravatar.cc/150?img=70', text: 'Traditional dance is so graceful 💃', time: '3d ago', likes: 67, liked: false },
+                { author: 'Robert Wilson', username: '@RobertW', avatar: 'https://i.pravatar.cc/150?img=75', text: 'The costumes are incredible!', time: '3d ago', likes: 45, liked: false }
+            ],
+            7: [
+                { author: 'Patricia Moore', username: '@PatriciaM', avatar: 'https://i.pravatar.cc/150?img=80', text: 'Ancient art at its finest!', time: '1w ago', likes: 29, liked: false }
+            ]
+        };
+
+        // Data untuk setiap post
+        const postData = [
+            { 
+                caption: "Menjelajahi keindahan budaya Indonesia yang kaya dan berwarna di Jawa. Setiap sudut menyimpan cerita unik!", 
+                date: "2 jam lalu", 
+                liked: false,
+                likeCount: 1200,
+                commentCount: 234
+            },
+            { 
+                caption: "Keagungan Candi Borobudur saat matahari terbit. Sungguh pemandangan yang memukau dan spiritual.", 
+                date: "1 hari lalu", 
+                liked: true,
+                likeCount: 2500,
+                commentCount: 456
+            },
+            { 
+                caption: "Saksi bisu sejarah dan arsitektur kuno. Candi di Indonesia selalu memancarkan aura magis.", 
+                date: "5 hari lalu", 
+                liked: false,
+                likeCount: 890,
+                commentCount: 123
+            },
+            { 
+                caption: "Ketenangan di Pura Tirta Empul, Bali. Air suci dan suasana damai menyelimuti tempat ini.", 
+                date: "1 minggu lalu", 
+                liked: false,
+                likeCount: 3100,
+                commentCount: 567
+            },
+            { 
+                caption: "Mengagumi detail megah Candi Prambanan. Keindahan reliefnya tak tertandingi.", 
+                date: "2 minggu lalu", 
+                liked: true,
+                likeCount: 1800,
+                commentCount: 345
+            },
+            { 
+                caption: "Pesona lain dari budaya Indonesia. Kain tradisional yang memukau mata.", 
+                date: "3 minggu lalu", 
+                liked: false,
+                likeCount: 2200,
+                commentCount: 412
+            },
+            { 
+                caption: "Tari tradisional yang indah dan penuh makna. Warisan budaya yang harus dilestarikan.", 
+                date: "1 bulan lalu", 
+                liked: true,
+                likeCount: 4300,
+                commentCount: 789
+            },
+            { 
+                caption: "Patung batu di pulau dewata. Selalu ada yang baru untuk ditemukan.", 
+                date: "2 bulan lalu", 
+                liked: false,
+                likeCount: 1500,
+                commentCount: 267
+            }
+        ];
+
+        let currentPostIndex = 0;
+
+        // Fungsi untuk format angka
+        function formatNumber(num) {
+            if (num >= 1000) {
+                return (num / 1000).toFixed(1) + 'K';
+            }
+            return num.toString();
+        }
+
+        // Fungsi untuk update tampilan like count
+        function updateLikeDisplay(postIndex) {
+            const postItem = document.querySelector(`[data-post-index="${postIndex}"]`);
+            const likeCountSpan = postItem.querySelector('.like-count');
+            likeCountSpan.textContent = formatNumber(postData[postIndex].likeCount);
+        }
+
+        function updateCommentDisplay(postIndex) {
+            const postItem = document.querySelector(`[data-post-index="${postIndex}"]`);
+            const commentCountSpan = postItem.querySelector('.comment-count');
+            commentCountSpan.textContent = formatNumber(postData[postIndex].commentCount);
+        }
+
+        function loadComments(postIndex) {
+            const commentsSection = document.getElementById('modalCommentsSection');
+            commentsSection.innerHTML = '';
+
+            if (commentData[postIndex] && commentData[postIndex].length > 0) {
+                commentData[postIndex].forEach((comment, index) => {
+                    const commentItem = document.createElement('div');
+                    commentItem.className = 'comment-item';
+                    commentItem.innerHTML = `
+                        <img src="${comment.avatar}" alt="${comment.author}">
+                        <div class="comment-content">
+                            <div class="comment-author">
+                                ${comment.author} <span>${comment.username}</span>
+                            </div>
+                            <div class="comment-text">${comment.text}</div>
+                            <div class="comment-actions">
+                                <a href="#" class="comment-like-btn ${comment.liked ? 'liked' : ''}" data-comment-index="${index}">
+                                    ${comment.likes} ${comment.likes === 1 ? 'like' : 'likes'}
+                                </a>
+                                <a href="#">Reply</a>
+                                <span style="color: #ccc;">${comment.time}</span>
+                            </div>
+                        </div>
+                    `;
+                    commentsSection.appendChild(commentItem);
+                });
+
+                // Add event listeners to comment like buttons
+                document.querySelectorAll('.comment-like-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const commentIndex = parseInt(btn.dataset.commentIndex);
+                        toggleCommentLike(commentIndex, btn);
+                    });
+                });
+            } else {
+                commentsSection.innerHTML = '<p style="text-align: center; color: #888; padding: 20px 0;">No comments yet. Be the first to comment!</p>';
+            }
+        }
+
+        function toggleCommentLike(commentIndex, btn) {
+            const comment = commentData[currentPostIndex][commentIndex];
+            
+            if (comment.liked) {
+                comment.liked = false;
+                comment.likes--;
+                btn.classList.remove('liked');
+            } else {
+                comment.liked = true;
+                comment.likes++;
+                btn.classList.add('liked');
+            }
+            
+            btn.textContent = `${comment.likes} ${comment.likes === 1 ? 'like' : 'likes'}`;
+        }
+
+        function submitComment() {
+            const input = document.getElementById('commentInput');
+            const commentText = input.value.trim();
+            
+            if (!commentText) return;
+            
+            if (!commentData[currentPostIndex]) {
+                commentData[currentPostIndex] = [];
+            }
+            
+            const newComment = {
+                author: 'Floyd Miles',
+                username: '@FloydMiles',
+                avatar: 'https://i.pravatar.cc/150?img=12',
+                text: commentText,
+                time: 'Just now',
+                likes: 0,
+                liked: false
+            };
+            
+            commentData[currentPostIndex].unshift(newComment);
+            postData[currentPostIndex].commentCount++;
+            
+            // Reload comments
+            loadComments(currentPostIndex);
+            
+            // Update modal count
+            document.getElementById('modalCommentCount').textContent = formatNumber(postData[currentPostIndex].commentCount);
+            
+            // Update grid count
+            updateCommentDisplay(currentPostIndex);
+            
+            input.value = '';
+        }
+
+        // Modal elements
+        const modal = document.getElementById("postModal");
+        const modalImg = document.getElementById("modalImage");
+        const modalUserAvatar = document.getElementById("modalUserAvatar");
+        const modalUserName = document.getElementById("modalUserName");
+        const modalUserHandle = document.getElementById("modalUserHandle");
+        const modalCaption = document.getElementById("modalCaption");
+        const modalLikeCount = document.getElementById("modalLikeCount");
+        const modalCommentCount = document.getElementById("modalCommentCount");
+        const modalDate = document.getElementById("modalDate");
+        const modalLikeButton = document.getElementById("modalLikeButton");
+        const closeBtn = document.querySelector(".close");
+
+        // Buka modal ketika post item diklik
+        document.querySelectorAll('.post-item').forEach((item) => {
+            item.addEventListener('click', function(e) {
+                // Jangan buka modal jika yang diklik adalah interaction item
+                if (e.target.closest('.interaction-item')) {
+                    return;
+                }
+
+                const postIndex = parseInt(this.dataset.postIndex);
+                currentPostIndex = postIndex;
+                const data = postData[postIndex];
+
+                // Ambil data dari item
+                const imgSrc = this.querySelector('img').src;
+                const userAvatarSrc = this.querySelector('.post-user-avatar').src;
+                const userName = this.querySelector('.post-user-details h4').textContent;
+                const userHandle = this.querySelector('.post-user-details p').textContent;
+
+                // Isi modal
+                modalImg.src = imgSrc;
+                modalUserAvatar.src = userAvatarSrc;
+                modalUserName.textContent = userName;
+                modalUserHandle.textContent = userHandle;
+                modalCaption.textContent = data.caption;
+                modalLikeCount.textContent = formatNumber(data.likeCount);
+                modalCommentCount.textContent = formatNumber(data.commentCount);
+                modalDate.textContent = data.date;
+
+                // Load comments
+                loadComments(postIndex);
+
+                // Set status liked
+                if (data.liked) {
+                    modalLikeButton.classList.add('liked');
+                    modalLikeButton.querySelector('i').classList.remove('far');
+                    modalLikeButton.querySelector('i').classList.add('fas');
+                } else {
+                    modalLikeButton.classList.remove('liked');
+                    modalLikeButton.querySelector('i').classList.remove('fas');
+                    modalLikeButton.querySelector('i').classList.add('far');
+                }
+
+                // Simpan index untuk referensi
+                modal.dataset.postIndex = postIndex;
+
+                // Tampilkan modal
+                modal.style.display = "flex";
+                document.body.style.overflow = 'hidden';
+            });
+        });
+
+        // Tutup modal
+        closeBtn.onclick = function() {
+            modal.style.display = "none";
+            document.body.style.overflow = 'auto';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Handle like di modal
+        modalLikeButton.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const postIndex = parseInt(modal.dataset.postIndex);
+            const data = postData[postIndex];
+            const icon = this.querySelector('i');
+            const countSpan = modalLikeCount;
+
+            if (data.liked) {
+                // Unlike
+                data.liked = false;
+                data.likeCount -= 1;
+                this.classList.remove('liked');
+                icon.classList.remove('fas');
+                icon.classList.add('far');
+            } else {
+                // Like
+                data.liked = true;
+                data.likeCount += 1;
+                this.classList.add('liked');
+                icon.classList.remove('far');
+                icon.classList.add('fas');
+
+                // Animasi partikel
+                for(let i = 0; i < 5; i++) {
+                    const particle = document.createElement('i');
+                    particle.className = 'fas fa-thumbs-up like-particle';
+                    particle.style.left = (Math.random() * 40 - 20) + 'px';
+                    this.appendChild(particle);
+                    setTimeout(() => particle.remove(), 1000);
+                }
+            }
+
+            countSpan.textContent = formatNumber(data.likeCount);
+            
+            updateLikeDisplay(postIndex);
+        });
+
+        
+        document.querySelectorAll('.post-item').forEach((item) => {
+            const likeButton = item.querySelector('.interaction-item:first-child');
+            
+            likeButton.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const postIndex = parseInt(item.dataset.postIndex);
+                const data = postData[postIndex];
+                const icon = this.querySelector('i');
+                const countSpan = this.querySelector('span');
+
+                if (data.liked) {
+                    // Unlike
+                    data.liked = false;
+                    data.likeCount -= 1;
+                } else {
+                    // Like
+                    data.liked = true;
+                    data.likeCount += 1;
+
+                    // Animasi scale
+                    icon.style.transform = 'scale(1.3)';
+                    setTimeout(() => {
+                        icon.style.transform = 'scale(1)';
+                    }, 200);
+
+                    // Animasi partikel
+                    for(let i = 0; i < 5; i++) {
+                        const particle = document.createElement('i');
+                        particle.className = 'fas fa-thumbs-up like-particle';
+                        particle.style.left = (Math.random() * 40 - 20) + 'px';
+                        this.style.position = 'relative';
+                        this.appendChild(particle);
+                        setTimeout(() => particle.remove(), 1000);
+                    }
+                }
+
+                // Update count
+                countSpan.textContent = formatNumber(data.likeCount);
+            });
+        });
+
+        // Comment submit
+        document.getElementById('commentSubmitBtn').addEventListener('click', submitComment);
+        document.getElementById('commentInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitComment();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.style.display === 'flex') {
+                closeBtn.click();
+            }
+        });
+
+        // Filter icon animation
+        const filterIcon = document.querySelector('.filter-icon');
+        filterIcon.addEventListener('click', function() {
+            this.style.transform = 'rotate(180deg) scale(0.9)';
+            setTimeout(() => {
+                this.style.transform = 'rotate(0deg) scale(1)';
+            }, 300);
+        });
+
+        // Nav links animation
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 100);
+            });
+        });
+
+        // Profile card animation
+        const profileCard = document.querySelector('.profile-card');
+        if(profileCard) {
+            const profileLink = document.querySelector('.profile-card-link');
+            profileLink.addEventListener('click', function(e) {
+                profileCard.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    profileCard.style.transform = 'translateY(-2px)';
+                }, 100);
+            });
+        }
+
+        // Lazy loading untuk images
+        const observerOptions = {
+            root: null,
+            threshold: 0.1,
+            rootMargin: '50px'
+        };
+
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const img = entry.target;
+                    img.style.opacity = '0';
+                    img.style.transition = 'opacity 0.5s ease';
+                    
+                    setTimeout(() => {
+                        img.style.opacity = '1';
+                    }, 100);
+                    
+                    imageObserver.unobserve(img);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.post-item img').forEach(img => {
+            imageObserver.observe(img);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NuJo - New Post</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #fff;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            height: 100%;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            max-width: 100%;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 0;
+            box-shadow: none;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .left-sidebar {
+            padding: 20px;
+            border-right: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            height: 100%;
+            overflow-y: hidden;
+        }
+
+        .left-sidebar .logo {
+            margin-bottom: 30px;
+            flex-shrink: 0;
+        }
+
+        .left-sidebar .logo img {
+            max-width: 120px;
+            height: auto;
+        }
+
+        .left-sidebar .nav-links {
+            list-style: none;
+            flex-grow: 1;
+            margin-top: 20px;
+            overflow-y: auto;
+        }
+
+        .left-sidebar .nav-links::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .left-sidebar .nav-links::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 10px;
+        }
+
+        .left-sidebar .nav-links li {
+            margin-bottom: 15px;
+        }
+
+        .left-sidebar .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .left-sidebar .nav-links a i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .left-sidebar .nav-links a.active,
+        .left-sidebar .nav-links a:hover {
+            background-color: #00cba3;
+            color: #fff;
+        }
+
+        .left-sidebar .nav-links li:last-child a {
+            background-color: transparent;
+            color: #555;
+            padding: 0;
+        }
+
+        .left-sidebar .nav-links li:last-child a i {
+            background-color: #00cba3;
+            color: #fff;
+            padding: 8px;
+            border-radius: 50%;
+            font-size: 1rem;
+            margin-right: 15px;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .left-sidebar .nav-links li:last-child a:hover i {
+            background-color: #1a9c94;
+        }
+
+        .left-sidebar .profile-card-link {
+            text-decoration: none;
+            display: block;
+        }
+
+        .left-sidebar .profile-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            margin-top: 15px;
+            flex-shrink: 0;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            cursor: pointer;
+        }
+
+        .left-sidebar .profile-card:hover {
+            background-color: #e8f5f3;
+            transform: translateY(-2px);
+        }
+
+        .left-sidebar .profile-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid #eee;
+        }
+
+        .left-sidebar .profile-info h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .left-sidebar .profile-info p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .main-content {
+            padding: 30px 50px;
+            height: 100%;
+            overflow-y: auto;
+            background-color: #fafafa;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .main-content h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 30px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .post-form-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .user-header img {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid #eee;
+        }
+
+        .user-header div h4 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .user-header div p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        .post-textarea {
+            width: 100%;
+            min-height: 200px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            font-size: 1rem;
+            font-family: 'Poppins', sans-serif;
+            resize: vertical;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .post-textarea:focus {
+            border-color: #00cba3;
+        }
+
+        .post-textarea::placeholder {
+            color: #aaa;
+        }
+
+        .hashtag-input {
+            width: 100%;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 12px 15px;
+            font-size: 0.95rem;
+            font-family: 'Poppins', sans-serif;
+            margin-bottom: 20px;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .hashtag-input:focus {
+            border-color: #00cba3;
+        }
+
+        .image-upload-section {
+            margin-bottom: 25px;
+            width: 100%;
+            overflow: visible;
+        }
+
+        .upload-label {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .image-upload-box {
+            border: 2px dashed #ccc;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: #fafafa;
+            width: 100%;
+            display: block;
+            box-sizing: border-box;
+        }
+
+        .image-upload-box:hover {
+            border-color: #00cba3;
+            background-color: #f0faf8;
+        }
+
+        .image-upload-box i {
+            font-size: 3rem;
+            color: #00cba3;
+            margin-bottom: 10px;
+        }
+
+        .image-upload-box p {
+            color: #888;
+            font-size: 0.9rem;
+            margin: 5px 0;
+        }
+
+        .image-upload-box input[type="file"] {
+            display: none;
+        }
+
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .image-preview {
+            position: relative;
+            border-radius: 10px;
+            overflow: visible;
+            background-color: #f5f5f5;
+            border: 1px solid #e0e0e0;
+            flex: 0 0 auto;
+            max-width: 100%;
+        }
+
+        .image-preview img {
+            width: auto;
+            height: auto;
+            display: block;
+            max-width: 250px;
+            max-height: 250px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(255, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .remove-image:hover {
+            background-color: rgba(255, 0, 0, 1);
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .btn-cancel {
+            background-color: #f0f0f0;
+            color: #555;
+        }
+
+        .btn-cancel:hover {
+            background-color: #e0e0e0;
+        }
+
+        .btn-post {
+            background-color: #00cba3;
+            color: #fff;
+        }
+
+        .btn-post:hover {
+            background-color: #1a9c94;
+        }
+
+        .btn-post:disabled {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+            }
+
+            .left-sidebar {
+                display: none;
+            }
+
+            .main-content {
+                padding: 15px;
+            }
+
+            .post-form-container {
+                padding: 20px;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="left-sidebar">
+            <div class="logo">
+                <img src="logo_nujo2.png" alt="NuJo Logo">
+            </div>
+            <ul class="nav-links">
+                <li><a href="home page.html"><i class="fas fa-home"></i> <span>Home</span></a></li>
+                <li><a href="notif page.html"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
+                <li><a href="message page.html"><i class="fas fa-envelope"></i> <span>Messages</span></a></li>
+                <li><a href="post page.html"><i class="fas fa-image"></i> <span>Post</span></a></li>
+                <li><a href="newpost.html" class="active"><i class="fas fa-plus"></i> <span>New Post</span></a></li>
+            </ul>
+            <a href="profile.html" class="profile-card-link">
+                <div class="profile-card">
+                    <img src="imgprofil.png" alt="Floyd Miles">
+                    <div class="profile-info">
+                        <h4>Floyd Miles</h4>
+                        <p>@FloydMiles</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="main-content">
+            <h1>Create New Post</h1>
+
+            <div class="post-form-container">
+                <div class="user-header">
+                    <img src="imgprofil.png" alt="Floyd Miles">
+                    <div>
+                        <h4>Floyd Miles</h4>
+                        <p>@FloydMiles</p>
+                    </div>
+                </div>
+
+                <form id="postForm">
+                    <textarea 
+                        class="post-textarea" 
+                        id="postContent" 
+                        placeholder="What do you want to share today, Floyd Miles?"
+                        required
+                    ></textarea>
+
+                    <input 
+                        type="text" 
+                        class="hashtag-input" 
+                        id="hashtags" 
+                        placeholder="Add hashtags (e.g., #Indonesia #Travel #Adventure)"
+                    >
+
+                    <div class="image-upload-section">
+                        <label class="upload-label">Add Images (Optional)</label>
+                        <label for="imageUpload" class="image-upload-box">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p><strong>Click to upload</strong> or drag and drop</p>
+                            <p>PNG, JPG, GIF up to 10MB</p>
+                            <input 
+                                type="file" 
+                                id="imageUpload" 
+                                accept="image/*" 
+                                multiple
+                            >
+                        </label>
+                        <div class="image-preview-container" id="imagePreviewContainer"></div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-cancel" onclick='window.location.href="home page.html"'>Cancel</button>
+                        <button type="submit" class="btn btn-post" id="postButton" onclick='window.location.href="home page.html"'>Post</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const imageUpload = document.getElementById('imageUpload');
+        const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+        let uploadedImages = [];
+
+        imageUpload.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            
+            files.forEach(file => {
+                if (file.type.startsWith('image/')) {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(event) {
+                        const imageUrl = event.target.result;
+                        uploadedImages.push(imageUrl);
+                        displayImages();
+                    };
+                    
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+
+        function displayImages() {
+            imagePreviewContainer.innerHTML = '';
+            
+            uploadedImages.forEach((imageUrl, index) => {
+                const previewDiv = document.createElement('div');
+                previewDiv.className = 'image-preview';
+                
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'remove-image';
+                removeBtn.innerHTML = '×';
+                removeBtn.onclick = function() {
+                    uploadedImages.splice(index, 1);
+                    displayImages();
+                };
+                
+                previewDiv.appendChild(img);
+                previewDiv.appendChild(removeBtn);
+                imagePreviewContainer.appendChild(previewDiv);
+            });
+        }
+    </script>
+</body>
+</html>

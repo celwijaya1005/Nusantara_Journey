@@ -1,0 +1,290 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Register - NuJo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f0f2f5;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            background-color: #fff;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        .image-carousel {
+            flex: 2;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            background-color: #ffffff; 
+            overflow: visible;
+            min-height: 550px;
+        }
+
+        .image-card {
+            position: absolute;
+            width: 280px;
+            height: 450px;
+            background-size: cover;
+            background-position: center;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            transition: transform 0.5s ease, opacity 0.5s ease;
+            opacity: 0;
+            transform: scale(0.9) translateY(20px);
+        }
+
+        .image-card:nth-child(1) {
+            transform: rotate(-10deg) translateX(-150px) translateY(0);
+            opacity: 1; 
+            z-index: 1;
+        }
+
+        .image-card:nth-child(2) {
+            transform: rotate(0deg) translateX(0px) translateY(0);
+            opacity: 1;
+            z-index: 2;
+        }
+
+        .image-card:nth-child(3) {
+            transform: rotate(10deg) translateX(150px) translateY(0);
+            opacity: 1;
+            z-index: 1;
+        }
+
+        
+        .image-carousel .image-card:nth-child(2) {
+            transform: scale(1.05) translateX(0px) translateY(0);
+            z-index: 3;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.3);
+        }
+
+
+        .auth-section {
+            flex: 1;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .logo {
+            margin-bottom: 30px;
+        }
+
+        .logo img {
+            max-width: 120px; 
+            height: auto;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            width: 100%;
+            max-width: 320px;
+        }
+
+        .input-group input:focus {
+            border-color: #00cba3;
+            outline: none;
+            box-shadow: 0 0 5px rgba(0, 203, 163, 0.3);
+        }
+
+
+        .input-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            color: #555;
+            box-sizing: border-box;
+            max-width: 320px;
+        }
+
+        .auth-section form {
+             width: 100%; 
+             display: flex; 
+             flex-direction: column;
+             align-items: center; 
+        }
+
+        .input-group input::placeholder {
+            color: #aaa;
+        }
+
+        .login-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #00cba3; 
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            margin-top: 10px;
+            max-width: 320px;
+        }
+
+        .login-button:hover {
+            background-color: #1a9c94;
+        }
+
+        .or-separator {
+            display: flex;
+            align-items: center;
+            text-align: center;
+            margin: 25px 0;
+            width: 100%;
+        }
+
+        .or-separator::before,
+        .or-separator::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #eee;
+        }
+
+        .or-separator:not(:empty)::before {
+            margin-right: .25em;
+        }
+
+        .or-separator:not(:empty)::after {
+            margin-left: .25em;
+        }
+
+        .or-separator span {
+            padding: 0 10px;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .google-register-button {
+            width: 100%;
+            padding: 12px;
+            background-color: #fff;
+            color: #555;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        .google-register-button i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .google-register-button:hover {
+            background-color: #f9f9f9;
+            border-color: #ccc;
+        }
+
+        .login-link {
+            margin-top: 30px;
+            font-size: 0.95rem;
+            color: #666;
+        }
+
+        .login-link a {
+            color: #00cba3;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .login-link a:hover {
+            text-decoration: underline;
+        }
+
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+                width: 95%;
+            }
+
+            .image-carousel {
+                display: none; 
+            }
+
+            .auth-section {
+                padding: 30px 20px;
+            }
+
+            .logo {
+                margin-bottom: 20px;
+            }
+
+            .logo img {
+                max-width: 100px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="image-carousel">
+            <div class="image-card active" style="background-image: url('imgbromo.png');"></div>
+            <div class="image-card" style="background-image: url('imgkuta.png');"></div>
+            <div class="image-card" style="background-image: url('img1.png');"></div>
+        </div>
+        <div class="auth-section">
+            <div class="logo">
+                <img height="32" width="100" src="logo_nujo2.png">
+            </div>
+            <form id="loginForm">
+                <div class="input-group">
+                    <input type="text" id="username" placeholder="Username" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="password" placeholder="Password" required>
+                </div>
+                <button type="submit" class="login-button" onclick="window.location.href='home page.html'">Log in</button>
+            </form>
+            <div class="or-separator">
+                <span>OR</span>
+            </div>
+            <button class="google-register-button" onclick="window.location.href='home page.html'">
+                <i class="fab fa-google"></i> Login with Google
+            </button>
+            <div class="login-link">
+                Don't have an account? <a href="index.html">Register</a>
+            </div>
+        </div>
+    </div>
+
+    
+</body>
+</html>

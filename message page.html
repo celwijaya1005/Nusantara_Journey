@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NuJo - Messages</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #ffffff;
+            color: #171717;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .dashboard-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            background-color: #ffffff;
+        }
+
+        .left-sidebar {
+            padding: 20px;
+            border-right: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            width: 250px;
+            height: 100vh;
+            background-color: #fff;
+            flex-shrink: 0;
+        }
+
+        .left-sidebar .logo {
+            margin-bottom: 30px;
+            flex-shrink: 0;
+        }
+
+        .left-sidebar .logo img {
+            max-width: 120px;
+            height: auto;
+        }
+
+        .left-sidebar .nav-links {
+            list-style: none;
+            flex-grow: 1;
+            margin-top: 20px;
+            overflow-y: auto;
+        }
+
+        .left-sidebar .nav-links::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .left-sidebar .nav-links::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 10px;
+        }
+
+        .left-sidebar .nav-links li {
+            margin-bottom: 15px;
+        }
+
+        .left-sidebar .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .left-sidebar .nav-links a i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .left-sidebar .nav-links a.active,
+        .left-sidebar .nav-links a:hover {
+            background-color: #00cba3;
+            color: #ffffff;
+        }
+
+        .left-sidebar .nav-links li:last-child a {
+            background-color: transparent;
+            color: #555;
+            padding: 0;
+        }
+        .left-sidebar .nav-links li:last-child a i {
+            background-color: #00cba3;
+            color: #fff;
+            padding: 8px;
+            border-radius: 50%;
+            font-size: 1rem;
+            margin-right: 15px;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .left-sidebar .nav-links li:last-child a:hover i {
+            background-color: #1a9c94;
+        }
+
+        .left-sidebar .profile-card-link {
+            text-decoration: none;
+            display: block;
+        }
+
+        .left-sidebar .profile-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            margin-top: 15px;
+            flex-shrink: 0;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            cursor: pointer;
+        }
+
+        .left-sidebar .profile-card:hover {
+            background-color: #e8f5f3;
+            transform: translateY(-2px);
+        }
+
+        .left-sidebar .profile-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid #eee;
+        }
+
+        .left-sidebar .profile-info h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .left-sidebar .profile-info p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* Messages Content styles */
+        .messages-content {
+            display: flex;
+            flex: 1;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .message-list {
+            width: 350px;
+            border-right: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            flex-shrink: 0;
+        }
+
+        .message-list h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #333;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .message-list-scroll {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .message-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            border-bottom: 1px solid #f8f8f8;
+        }
+
+        .message-item:hover, .message-item.active {
+            background-color: #e0f8f3;
+        }
+
+        .message-item img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .message-item .message-info {
+            flex-grow: 1;
+            overflow: hidden;
+        }
+
+        .message-item .message-info h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .message-item .message-info p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #888;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .message-item .message-time {
+            font-size: 0.8rem;
+            color: #aaa;
+            flex-shrink: 0;
+        }
+
+        /* Chat Area styles */
+        .chat-area {
+            display: flex;
+            flex-direction: column;
+            flex: 1;
+            height: 100vh;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .chat-header img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 10px;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background-color: #fdfdfd;
+        }
+
+        .chat-message {
+            display: flex;
+            margin-bottom: 15px;
+        }
+
+        .chat-message.sent {
+            justify-content: flex-end;
+        }
+
+        .chat-message.received {
+            justify-content: flex-start;
+        }
+
+        .chat-message .message-bubble {
+            max-width: 70%;
+            padding: 10px 15px;
+            border-radius: 20px;
+            line-height: 1.4;
+            position: relative;
+        }
+
+        .chat-message.sent .message-bubble {
+            background-color: #00cba3;
+            color: #fff;
+            border-bottom-right-radius: 5px;
+        }
+
+        .chat-message.received .message-bubble {
+            background-color: #f0f0f0;
+            color: #333;
+            border-bottom-left-radius: 5px;
+        }
+
+        .chat-input {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-top: 1px solid #eee;
+            background-color: #fff;
+        }
+
+        .chat-input input[type="text"] {
+            flex-grow: 1;
+            border: 1px solid #eee;
+            border-radius: 25px;
+            padding: 10px 15px;
+            font-size: 0.95rem;
+            margin-right: 10px;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .chat-input input[type="text"]:focus {
+            border-color: #00cba3;
+        }
+
+        .chat-input button {
+            background-color: #00cba3;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .chat-input button:hover {
+            background-color: #1a9c94;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 1024px) {
+            .left-sidebar {
+                width: 80px;
+            }
+
+            .left-sidebar .nav-links a span {
+                display: none;
+            }
+            .left-sidebar .nav-links a {
+                justify-content: center;
+                padding: 10px 0;
+            }
+            .left-sidebar .nav-links a i {
+                margin-right: 0;
+            }
+            .left-sidebar .logo {
+                text-align: center;
+            }
+            .left-sidebar .logo img {
+                max-width: 50px;
+            }
+            .left-sidebar .profile-card {
+                display: none;
+            }
+            .left-sidebar .nav-links li:last-child a i {
+                margin-right: 0;
+            }
+
+            .message-list {
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+
+            .left-sidebar {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                border-right: none;
+                border-bottom: 1px solid #eee;
+                padding: 15px;
+            }
+            .left-sidebar .logo {
+                margin-bottom: 0;
+            }
+            .left-sidebar .nav-links {
+                display: none;
+            }
+            .left-sidebar .profile-card {
+                display: none;
+            }
+            .left-sidebar .logo img {
+                max-width: 80px;
+            }
+
+            .messages-content {
+                flex-direction: column;
+                height: calc(100vh - 80px);
+            }
+            
+            .message-list {
+                width: 100%;
+                height: 40%;
+                border-right: none;
+                border-bottom: 1px solid #eee;
+            }
+            
+            .chat-area {
+                height: 60%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+
+        <div class="left-sidebar">
+            <div class="logo">
+                <img src="logo_nujo2.png" alt="NuJo Logo">
+            </div>
+            <ul class="nav-links">
+                <li><a href="home page.html"><i class="fas fa-home"></i> <span>Home</span></a></li>
+                <li><a href="notif page.html"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
+                <li><a href="message page.html" class="active"><i class="fas fa-envelope"></i> <span>Messages</span></a></li>
+                <li><a href="post page.html"><i class="fas fa-image"></i> <span>Post</span></a></li>
+                <li><a href="newpost.html"><i class="fas fa-plus"></i> <span>New Post</span></a></li>
+            </ul>
+            <a href="profile.html" class="profile-card-link">
+                <div class="profile-card">
+                    <img src="imgprofildilan.jpg" alt="Dilan">
+                    <div class="profile-info">
+                        <h4>Floyd</h4>
+                        <p>@FloydMiles</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="messages-content">
+            <div class="message-list">
+                <h2>Messages</h2>
+                <div class="message-list-scroll">
+                    <div class="message-item active">
+                        <img src="imgprofilmilea.jpg" alt="Jacob Morgan">
+                        <div class="message-info">
+                            <h4>Milea Adnan Hussain</h4>
+                            <p>Hello, I'm Milea</p>
+                        </div>
+                        <div class="message-time">2h</div>
+                    </div>
+
+                    <div class="message-item">
+                        <img src="imgprofilcika.jpg" alt="Jane Cooper">
+                        <div class="message-info">
+                            <h4>Ancika Mehrunisa Rabu</h4>
+                            <p>How are you?</p>
+                        </div>
+                        <div class="message-time">4h</div>
+                    </div>
+
+                    <div class="message-item">
+                        <img src="imgprofil.png" alt="Kathryn Murphy">
+                        <div class="message-info">
+                            <h4>Kathryn Murphy</h4>
+                            <p>See you tomorrow!</p>
+                        </div>
+                        <div class="message-time">1d</div>
+                    </div>
+
+                    <div class="message-item">
+                        <img src="imggunung.jpg" alt="Marvin Mckinney">
+                        <div class="message-info">
+                            <h4>Marvin Mckinney</h4>
+                            <p>Okey Cello</p>
+                        </div>
+                        <div class="message-time">2d</div>
+                    </div>
+
+                    <div class="message-item">
+                        <img src="imgbalekambang.jpg" alt="Courtney Henry">
+                        <div class="message-info">
+                            <h4>Courtney Henry</h4>
+                            <p>Sounds good!</p>
+                        </div>
+                        <div class="message-time">2d</div>
+                    </div>
+
+                    <div class="message-item">
+                        <img src="imgprofil.png" alt="Esther Howard">
+                        <div class="message-info">
+                            <h4>Esther Howard</h4>
+                            <p>Okey bye.</p>
+                        </div>
+                        <div class="message-time">3d</div>
+                    </div>
+
+                    <div class="message-item">
+                        <img src="imgprofil.png" alt="Jenny Wilson">
+                        <div class="message-info">
+                            <h4>Jenny Wilson</h4>
+                            <p>Great!</p>
+                        </div>
+                        <div class="message-time">1w</div>
+                    </div>
+
+                    <div class="message-item">
+                        <img src="imgprofil.png" alt="Dianne Russell">
+                        <div class="message-info">
+                            <h4>Dianne Russell</h4>
+                            <p>No problem.</p>
+                        </div>
+                        <div class="message-time">2w</div>
+                    </div>
+
+                    <div class="message-item">
+                        <img src="imgampat2.jpg" alt="Ralph Edwards">
+                        <div class="message-info">
+                            <h4>Ralph Edwards</h4>
+                            <p>Will do.</p>
+                        </div>
+                        <div class="message-time">3w</div>
+                    </div>
+
+                    <div class="message-item">
+                        <img src="imgprofil.png" alt="Bessie Cooper">
+                        <div class="message-info">
+                            <h4>Bessie Cooper</h4>
+                            <p>Got it.</p>
+                        </div>
+                        <div class="message-time">1m</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-area">
+                <div class="chat-header">
+                    <img src="imgprofilmilea.jpg" alt="Milea Adnan Hussain">
+                    <h3>Milea Adnan Hussain</h3>
+                </div>
+
+                <div class="chat-messages">
+                    <div class="chat-message received">
+                        <div class="message-bubble">Hello, I'm Milea</div>
+                    </div>
+                    <div class="chat-message sent">
+                        <div class="message-bubble">Hello, I'm Dilan</div>
+                    </div>
+                </div>
+
+                <div class="chat-input">
+                    <input type="text" placeholder="Message...">
+                    <button><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</body>
+</html>

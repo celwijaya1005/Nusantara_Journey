@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NuJo - Media</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            max-width: 1500px;
+            width: 100%;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .left-sidebar {
+            padding: 20px;
+            border-right: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            box-shadow: none;
+            height: 100%;
+            overflow-y: hidden;
+        }
+
+        .left-sidebar .logo {
+            margin-bottom: 30px;
+            flex-shrink: 0;
+        }
+
+        .left-sidebar .logo h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #00cba3;
+            letter-spacing: -1px;
+        }
+
+        .left-sidebar .nav-links {
+            list-style: none;
+            flex-grow: 1;
+            margin-top: 20px;
+            overflow-y: auto;
+        }
+
+        .left-sidebar .nav-links::-webkit-scrollbar {
+            width: 5px;
+        }
+        
+        .left-sidebar .nav-links::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 10px;
+        }
+
+        .left-sidebar .nav-links li {
+            margin-bottom: 15px;
+        }
+
+        .left-sidebar .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .left-sidebar .nav-links a i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .left-sidebar .nav-links a.active,
+        .left-sidebar .nav-links a:hover {
+            background-color: #00cba3;
+            color: #fff;
+        }
+
+        .left-sidebar .nav-links li:last-child a {
+            background-color: transparent;
+            color: #555;
+            padding: 0;
+        }
+
+        .left-sidebar .nav-links li:last-child a i {
+            background-color: #00cba3;
+            color: #fff;
+            padding: 8px;
+            border-radius: 50%;
+            font-size: 1rem;
+            margin-right: 15px;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .left-sidebar .nav-links li:last-child a:hover i {
+            background-color: #1a9c94;
+        }
+
+        .left-sidebar .profile-card-link {
+            text-decoration: none;
+            display: block;
+        }
+
+        .left-sidebar .profile-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            margin-top: 15px;
+            flex-shrink: 0;
+            transition: background-color 0.2s ease, transform 0.1s ease;
+            cursor: pointer;
+        }
+
+        .left-sidebar .profile-card:hover {
+            background-color: #e8f5f3;
+            transform: translateY(-2px);
+        }
+
+        .left-sidebar .profile-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid #eee;
+        }
+
+        .left-sidebar .profile-info h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .left-sidebar .profile-info p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        .main-content {
+            background-color: #f5f5f5;
+            padding: 30px 40px;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .main-content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .main-content h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #333;
+            margin: 0;
+        }
+
+        .filter-icon {
+            background-color: #fff;
+            width: 45px;
+            height: 45px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            transition: all 0.2s ease;
+        }
+
+        .filter-icon:hover {
+            background-color: #00cba3;
+            color: #fff;
+        }
+
+        .filter-icon i {
+            font-size: 1.2rem;
+            color: inherit;
+        }
+
+        .media-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .media-item {
+            position: relative;
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: #fff;
+            aspect-ratio: 3/4;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .media-item:hover {
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+        }
+
+        .media-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .media-item:hover img {
+            transform: scale(1.1);
+        }
+
+        .media-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.7));
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 10px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .media-item:hover .media-overlay {
+            opacity: 1;
+        }
+
+        .media-user-info {
+            display: flex;
+            align-items: center;
+            gap: 5px; 
+        }
+
+        .media-user-avatar {
+            width: 45px !important; 
+            height: 45px !important;
+            border-radius: 50%;
+            border: 2px solid #fff;
+        }
+
+        .media-user-details {
+            color: #fff;
+        }
+
+        .media-user-details h4 {
+            font-size: 0.95rem; 
+            font-weight: 600;
+            margin: 0;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .media-user-details p {
+            font-size: 0.8rem; 
+            margin: 0;
+            opacity: 0.9;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+        }
+
+        .media-interactions {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .interaction-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .interaction-item i {
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 1200px) {
+            .media-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 900px) {
+            .dashboard-container {
+                grid-template-columns: 80px 1fr;
+            }
+
+            .left-sidebar {
+                padding: 20px 10px;
+            }
+
+            .left-sidebar .logo h1 {
+                font-size: 1.5rem;
+                text-align: center;
+            }
+
+            .left-sidebar .nav-links a span {
+                display: none;
+            }
+
+            .left-sidebar .nav-links a {
+                justify-content: center;
+                padding: 10px 0;
+            }
+
+            .left-sidebar .nav-links a i {
+                margin-right: 0;
+            }
+
+            .left-sidebar .nav-links li:last-child a i {
+                margin-right: 0;
+                width: 38px;
+                height: 38px;
+            }
+
+            .left-sidebar .profile-card {
+                display: none;
+            }
+
+            .media-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .dashboard-container {
+                grid-template-columns: 1fr;
+                box-shadow: none;
+            }
+
+            body {
+                padding: 0;
+                background-color: #fff;
+            }
+
+            .left-sidebar {
+                border-right: none;
+                padding: 15px;
+                flex-direction: row;
+                align-items: center;
+                justify-content: space-between;
+                border-bottom: 1px solid #eee;
+            }
+
+            .left-sidebar .logo {
+                margin-bottom: 0;
+            }
+
+            .left-sidebar .logo h1 {
+                font-size: 1.5rem;
+            }
+
+            .left-sidebar .nav-links {
+                display: none;
+            }
+
+            .left-sidebar .profile-card {
+                display: none;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .media-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <script>
+        // Smooth scroll untuk sidebar
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', function(e) {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 100);
+            });
+        });
+
+        // Animation saat hover media item
+        const mediaItems = document.querySelectorAll('.media-item');
+        
+        mediaItems.forEach(item => {
+            item.addEventListener('mouseenter', function() {
+                const overlay = this.querySelector('.media-overlay');
+                const avatar = this.querySelector('.media-user-avatar');
+                const interactions = this.querySelectorAll('.interaction-item');
+                
+                // Fade in overlay dengan delay
+                setTimeout(() => {
+                    overlay.style.opacity = '1';
+                }, 50);
+                
+                // Animate avatar
+                setTimeout(() => {
+                    avatar.style.transform = 'scale(1.1)';
+                    avatar.style.transition = 'transform 0.3s ease';
+                }, 100);
+                
+                // Animate interactions satu per satu
+                interactions.forEach((interaction, index) => {
+                    setTimeout(() => {
+                        interaction.style.transform = 'translateY(0)';
+                        interaction.style.opacity = '1';
+                    }, 150 + (index * 50));
+                });
+            });
+            
+            item.addEventListener('mouseleave', function() {
+                const avatar = this.querySelector('.media-user-avatar');
+                const interactions = this.querySelectorAll('.interaction-item');
+                
+                avatar.style.transform = 'scale(1)';
+                
+                interactions.forEach(interaction => {
+                    interaction.style.transform = 'translateY(10px)';
+                    interaction.style.opacity = '0';
+                });
+            });
+        });
+
+        // Click effect pada filter icon
+        const filterIcon = document.querySelector('.filter-icon');
+        filterIcon.addEventListener('click', function() {
+            this.style.transform = 'rotate(180deg) scale(0.9)';
+            setTimeout(() => {
+                this.style.transform = 'rotate(0deg) scale(1)';
+            }, 300);
+            
+            // Tambahkan efek ripple
+            const ripple = document.createElement('span');
+            ripple.style.cssText = `
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                background: rgba(255,255,255,0.5);
+                border-radius: 50%;
+                transform: scale(0);
+                animation: ripple 0.6s ease-out;
+            `;
+            this.style.position = 'relative';
+            this.style.overflow = 'hidden';
+            this.appendChild(ripple);
+            
+            setTimeout(() => ripple.remove(), 600);
+        });
+
+        // Tambahkan style untuk animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes ripple {
+                to {
+                    transform: scale(2);
+                    opacity: 0;
+                }
+            }
+            
+            .interaction-item {
+                transform: translateY(10px);
+                opacity: 0;
+                transition: all 0.3s ease;
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Like animation ketika di click
+        document.querySelectorAll('.interaction-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const icon = this.querySelector('i');
+                const count = this.querySelector('span');
+                
+                // Animate icon
+                icon.style.transform = 'scale(1.3)';
+                icon.style.color = '#ff6b6b';
+                
+                setTimeout(() => {
+                    icon.style.transform = 'scale(1)';
+                }, 200);
+                
+                // Increment count dengan animation
+                if(icon.classList.contains('fa-heart')) {
+                    let currentCount = parseInt(count.textContent.replace('K', '00'));
+                    currentCount += 1;
+                    count.textContent = (currentCount / 100).toFixed(1) + 'K';
+                    
+                    // Particle effect
+                    for(let i = 0; i < 5; i++) {
+                        const particle = document.createElement('i');
+                        particle.className = 'fas fa-heart';
+                        particle.style.cssText = `
+                            position: absolute;
+                            color: #ff6b6b;
+                            font-size: 0.6rem;
+                            pointer-events: none;
+                            animation: particle-float 1s ease-out forwards;
+                        `;
+                        particle.style.left = Math.random() * 20 - 10 + 'px';
+                        this.style.position = 'relative';
+                        this.appendChild(particle);
+                        
+                        setTimeout(() => particle.remove(), 1000);
+                    }
+                }
+            });
+        });
+
+        // Animation untuk particle
+        const particleStyle = document.createElement('style');
+        particleStyle.textContent = `
+            @keyframes particle-float {
+                to {
+                    transform: translateY(-30px);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(particleStyle);
+
+        // Lazy loading untuk images
+        const observerOptions = {
+            root: null,
+            threshold: 0.1,
+            rootMargin: '50px'
+        };
+
+        const imageObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    const img = entry.target;
+                    img.style.opacity = '0';
+                    img.style.transition = 'opacity 0.5s ease';
+                    
+                    setTimeout(() => {
+                        img.style.opacity = '1';
+                    }, 100);
+                    
+                    imageObserver.unobserve(img);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.media-item img').forEach(img => {
+            imageObserver.observe(img);
+        });
+
+        // Profile card click effect
+        const profileCard = document.querySelector('.profile-card');
+        if(profileCard) {
+            profileCard.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'translateY(-2px)';
+                }, 100);
+            });
+        }
+    </script>
+    <div class="dashboard-container">
+        <div class="left-sidebar">
+            <div class="logo">
+                <h1>NUJO</h1>
+            </div>
+            <ul class="nav-links">
+                <li><a href="home page recent.html"><i class="fas fa-home"></i> <span>Home</span></a></li>
+                <li><a href="notif page.html"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
+                <li><a href="message page.html"><i class="fas fa-envelope"></i> <span>Messages</span></a></li>
+                <li><a href="media page.html" class="active"><i class="fas fa-image"></i> <span>Media</span></a></li>
+                <li><a href="newpost.html"><i class="fas fa-plus-circle"></i> <span>New Post</span></a></li>
+            </ul>
+            <a href="profile.html" class="profile-card-link">
+                <div class="profile-card">
+                    <img src="imgprofildilan.jpg" alt="Floyd Miles">
+                    <div class="profile-info">
+                        <h4>Floyd</h4>
+                        <p>@FloydMiles</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+
+        <div class="main-content">
+            <div class="main-content-header">
+                <h2>Media</h2>
+                <div class="filter-icon">
+                    <i class="fas fa-sliders-h"></i>
+                </div>
+            </div>
+
+            <div class="media-grid">
+                <div class="media-item">
+                    <img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=400&h=600&fit=crop" alt="Indonesian Culture 1">
+                    <div class="media-overlay">
+                        <div class="media-user-info">
+                            <img src="imgprofildilan.jpg" alt="Floyd Miles" class="media-user-avatar">
+                            <div class="media-user-details">
+                                <h4>Floyd Miles</h4>
+                                <p>@FloydMiles</p>
+                            </div>
+                        </div>
+                        <div class="media-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-heart"></i>
+                                <span>1.2K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span>234</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-item">
+                    <img src="https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&h=600&fit=crop" alt="Borobudur Temple">
+                    <div class="media-overlay">
+                        <div class="media-user-info">
+                            <img src="imgprofildilan.jpg" alt="Sarah Johnson" class="media-user-avatar">
+                            <div class="media-user-details">
+                                <h4>Sarah Johnson</h4>
+                                <p>@SarahJ</p>
+                            </div>
+                        </div>
+                        <div class="media-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-heart"></i>
+                                <span>2.5K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span>456</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-item">
+                    <img src="https://images.unsplash.com/photo-1570789210967-2cac24afeb00?w=400&h=600&fit=crop" alt="Indonesian Temple">
+                    <div class="media-overlay">
+                        <div class="media-user-info">
+                            <img src="imgprofildilan.jpg" alt="Mike Chen" class="media-user-avatar">
+                            <div class="media-user-details">
+                                <h4>Mike Chen</h4>
+                                <p>@MikeC</p>
+                            </div>
+                        </div>
+                        <div class="media-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-heart"></i>
+                                <span>890</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span>123</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-item">
+                    <img src="https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?w=400&h=600&fit=crop" alt="Bali Temple">
+                    <div class="media-overlay">
+                        <div class="media-user-info">
+                            <img src="imgprofildilan.jpg" alt="Amanda Lee" class="media-user-avatar">
+                            <div class="media-user-details">
+                                <h4>Amanda Lee</h4>
+                                <p>@AmandaL</p>
+                            </div>
+                        </div>
+                        <div class="media-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-heart"></i>
+                                <span>3.1K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span>567</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-item">
+                    <img src="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=400&h=600&fit=crop" alt="Prambanan">
+                    <div class="media-overlay">
+                        <div class="media-user-info">
+                            <img src="imgprofildilan.jpg" alt="David Kim" class="media-user-avatar">
+                            <div class="media-user-details">
+                                <h4>David Kim</h4>
+                                <p>@DavidK</p>
+                            </div>
+                        </div>
+                        <div class="media-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-heart"></i>
+                                <span>1.8K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span>345</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-item">
+                    <img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=400&h=600&fit=crop" alt="Indonesian Culture 2">
+                    <div class="media-overlay">
+                        <div class="media-user-info">
+                            <img src="imgprofildilan.jpg" alt="Emily Brown" class="media-user-avatar">
+                            <div class="media-user-details">
+                                <h4>Emily Brown</h4>
+                                <p>@EmilyB</p>
+                            </div>
+                        </div>
+                        <div class="media-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-heart"></i>
+                                <span>2.2K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span>412</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-item">
+                    <img src="https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=400&h=600&fit=crop" alt="Traditional Dance">
+                    <div class="media-overlay">
+                        <div class="media-user-info">
+                            <img src="imgprofildilan.jpg" alt="James Wilson" class="media-user-avatar">
+                            <div class="media-user-details">
+                                <h4>James Wilson</h4>
+                                <p>@JamesW</p>
+                            </div>
+                        </div>
+                        <div class="media-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-heart"></i>
+                                <span>4.3K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span>789</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media-item">
+                    <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=600&fit=crop" alt="Indonesian Statue">
+                    <div class="media-overlay">
+                        <div class="media-user-info">
+                            <img src="imgprofildilan.jpg" alt="Lisa Martinez" class="media-user-avatar">
+                            <div class="media-user-details">
+                                <h4>Lisa Martinez</h4>
+                                <p>@LisaM</p>
+                            </div>
+                        </div>
+                        <div class="media-interactions">
+                            <div class="interaction-item">
+                                <i class="fas fa-heart"></i>
+                                <span>1.5K</span>
+                            </div>
+                            <div class="interaction-item">
+                                <i class="fas fa-comment"></i>
+                                <span>267</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
