@@ -200,6 +200,7 @@
             align-items: center;
             justify-content: center;
             transition: background-color 0.3s ease, border-color 0.3s ease;
+            max-width: 320px;
         }
 
         .google-register-button i {
@@ -274,7 +275,7 @@
                 <div class="input-group">
                     <input type="password" id="password" placeholder="Password" required>
                 </div>
-                <button type="submit" class="register-button" onclick="window.location.href='home page.html'">Register</button>
+                <button type="submit" class="register-button">Register</button>
             </form>
             <div class="or-separator">
                 <span>OR</span>
@@ -288,6 +289,20 @@
         </div>
     </div>
 
-    
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            // Validasi sederhana - pastikan semua field diisi
+            if (username && email && password) {
+                // Redirect ke home page
+                window.location.href = 'home page.html';
+            }
+        });
+    </script>
 </body>
 </html>
