@@ -489,10 +489,10 @@
                 <li><a href="newpost.html"><i class="fas fa-plus"></i> <span>New Post</span></a></li>
             </ul>
             <div class="profile-card">
-                <img src="imgprofil.png" alt="Floyd Miles">
+                <img src="imgprofil.png" alt="Floyd Miles" id="sidebarProfilePic">
                 <div class="profile-info">
-                    <h4>Floyd Miles</h4>
-                    <p>@FloydMiles</p>
+                    <h4 id="sidebarName">Floyd Miles</h4>
+                    <p id="sidebarUsername">@FloydMiles</p>
                 </div>
             </div>
         </div>
@@ -515,26 +515,26 @@
                 <div class="profile-info-grid">
                     <div class="info-row">
                         <div class="info-label">Location</div>
-                        <div class="info-value">Indonesia</div>
+                        <div class="info-value" id="locationValue">Indonesia</div>
                     </div>
                     <div class="info-row">
                         <div class="info-label">Age</div>
-                        <div class="info-value">18 years old</div>
+                        <div class="info-value" id="ageValue">18 years old</div>
                     </div>
                     <div class="info-row">
                         <div class="info-label">Favorite Destination</div>
-                        <div class="info-value">Bali, Indonesia</div>
+                        <div class="info-value" id="favDestValue">Bali, Indonesia</div>
                     </div>
                     <div class="info-row">
                         <div class="info-label">Bio</div>
-                        <div class="info-value">Hello My name is Floyd Miles</div>
+                        <div class="info-value" id="bioValue">Hello My name is Floyd Miles</div>
                     </div>
                 </div>
             </div>
 
             <div class="profile-name-section">
-                <h2>Floyd Miles</h2>
-                <p>@FloydMiles</p>
+                <h2 id="mainName">Floyd Miles</h2>
+                <p id="mainUsername">@FloydMiles</p>
                 
                 <div class="profile-stats">
                     <div class="stat-item" onclick="showPosts()">
@@ -581,6 +581,121 @@
         </div>
     </div>
 
-    
+    <script>
+        // Load saved profile data from localStorage when page loads
+        window.addEventListener('load', function() {
+            loadProfileData();
+        });
+
+        function loadProfileData() {
+            const savedProfile = JSON.parse(localStorage.getItem('userProfile'));
+            
+            if (savedProfile) {
+                // Update sidebar profile info
+                const sidebarName = document.getElementById('sidebarName');
+                const sidebarUsername = document.getElementById('sidebarUsername');
+                if (sidebarName) sidebarName.textContent = savedProfile.username;
+                if (sidebarUsername) sidebarUsername.textContent = '@' + savedProfile.username.replace(/\s+/g, '');
+                
+                // Update main profile section
+                const mainName = document.getElementById('mainName');
+                const mainUsername = document.getElementById('mainUsername');
+                if (mainName) mainName.textContent = savedProfile.username;
+                if (mainUsername) mainUsername.textContent = '@' + savedProfile.username.replace(/\s+/g, '');
+                
+                // Update profile info fields
+                const locationValue = document.getElementById('locationValue');
+                const ageValue = document.getElementById('ageValue');
+                const favDestValue = document.getElementById('favDestValue');
+                const bioValue = document.getElementById('bioValue');
+                
+                if (locationValue) locationValue.textContent = savedProfile.location;
+                if (ageValue) ageValue.textContent = savedProfile.age || '18 years old';
+                if (favDestValue) favDestValue.textContent = savedProfile.favDestination;
+                if (bioValue) bioValue.textContent = savedProfile.bio;
+
+                // Update profile picture if saved
+                if (savedProfile.profilePicture) {
+                    document.getElementById('profileImage').src = savedProfile.profilePicture;
+                    document.getElementById('sidebarProfilePic').src = savedProfile.profilePicture;
+                }
+            }
+        }
+
+        function changeProfilePicture() {
+            // Create file input element
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = 'image/*';
+            
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(event) {
+                        const imageUrl = event.target.result;
+                        
+                        // Update profile pictures
+                        document.getElementById('profileImage').src = imageUrl;
+                        document.getElementById('sidebarProfilePic').src = imageUrl;
+                        
+                        // Save to localStorage
+                        const savedProfile = JSON.parse(localStorage.getItem('userProfile')) || {};
+                        savedProfile.profilePicture = imageUrl;
+                        localStorage.setItem('userProfile', JSON.stringify(savedProfile));
+                        
+                        alert('Profile picture updated successfully!');
+                    };
+                    reader.readAsDataURL(file);
+                }
+            };
+            
+            input.click();
+        }
+
+        function editProfile() {
+            window.location.href = 'editprofil.html';
+        }
+
+        function showPosts() {
+            alert('Showing all 245 posts...');
+            // You can implement a modal or navigate to posts page
+        }
+
+        function showFollowers() {
+            alert('Showing 1.2K followers list...');
+            // You can implement a modal or navigate to followers page
+        }
+
+        function showFollowing() {
+            alert('Showing 890 following list...');
+            // You can implement a modal or navigate to following page
+        }
+
+        function viewPost(postId) {
+            alert('Viewing post #' + postId);
+            // You can implement a modal to show full post or navigate to post detail page
+        }
+
+        function viewMorePosts() {
+            alert('Loading more posts...');
+            // You can implement pagination or load more posts
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                // Clear all saved data
+                localStorage.removeItem('userProfile');
+                
+                alert('Logged out successfully!');
+                
+                // Redirect to login page (uncomment when you have login page)
+                // window.location.href = 'login.html';
+                
+                // For now, reload the page to show default data
+                window.location.reload();
+            }
+        }
+    </script>
 </body>
 </html>

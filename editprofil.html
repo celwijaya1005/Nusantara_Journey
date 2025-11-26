@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NuJo - Edit Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f0f2f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            height: 100%; 
+        }
+
+        .dashboard-container {
+            display: grid;
+            grid-template-columns: 250px 1fr; 
+            max-width: 1500px; 
+            width: 100%;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            height: 100vh; 
+        }
+
+        .left-sidebar {
+            padding: 20px;
+            border-right: 1px solid #eee;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background-color: #fff;
+            box-shadow: none;
+            height: 100%; 
+            overflow-y: hidden; 
+        }
+
+        .left-sidebar .logo {
+            margin-bottom: 30px;
+        }
+
+        .left-sidebar .logo img {
+            max-width: 100px;
+            height: auto;
+        }
+
+        .left-sidebar .nav-links {
+            list-style: none;
+            flex-grow: 1; 
+            margin-top: 20px;
+        }
+
+        .left-sidebar .nav-links li {
+            margin-bottom: 15px;
+        }
+
+        .left-sidebar .nav-links a {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            text-decoration: none;
+            color: #555;
+            font-weight: 500;
+            border-radius: 8px;
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+
+        .left-sidebar .nav-links a i {
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        .left-sidebar .nav-links a.active,
+        .left-sidebar .nav-links a:hover {
+            background-color: #00cba3;
+            color: #fff;
+        }
+
+        .left-sidebar .nav-links li:last-child a {
+            background-color: transparent; 
+            color: #555;
+            padding: 0;
+        }
+
+        .left-sidebar .nav-links li:last-child a i {
+            background-color: #00cba3; 
+            color: #fff;
+            padding: 8px;
+            border-radius: 50%;
+            font-size: 1rem;
+            margin-right: 15px;
+            width: 38px; 
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .left-sidebar .nav-links li:last-child a:hover i {
+            background-color: #1a9c94;
+        }
+
+        .left-sidebar .profile-card {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            margin-top: auto;
+        }
+
+        .left-sidebar .profile-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
+            border: 2px solid #eee;
+        }
+
+        .left-sidebar .profile-info h4 {
+            margin: 0;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .left-sidebar .profile-info p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* Main Content - Edit Profile */
+        .main-content {
+            padding: 30px 40px;
+            height: 100%;
+            overflow-y: auto;
+        }
+
+        .profile-header {
+            margin-bottom: 30px;
+        }
+
+        .profile-header h1 {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .edit-form {
+            max-width: 700px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .form-row .field-label {
+            min-width: 180px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-row .colon {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-row input,
+        .form-row textarea {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 0.95rem;
+            transition: border-color 0.2s ease;
+            background-color: #f9f9f9;
+        }
+
+        .form-row input:focus,
+        .form-row textarea:focus {
+            outline: none;
+            border-color: #00cba3;
+            background-color: #fff;
+        }
+
+        .form-row textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-row .edit-btn {
+            background-color: #00cba3;
+            color: #fff;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            min-width: 80px;
+        }
+
+        .form-row .edit-btn:hover {
+            background-color: #1a9c94;
+        }
+
+        .password-field {
+            position: relative;
+        }
+
+        .password-field input {
+            padding-right: 45px;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        .save-btn {
+            background-color: #00cba3;
+            color: #fff;
+            border: none;
+            padding: 14px 50px;
+            border-radius: 25px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            margin-top: 30px;
+            display: inline-block;
+        }
+
+        .save-btn:hover {
+            background-color: #1a9c94;
+        }
+
+        @media (max-width: 1024px) {
+            .dashboard-container {
+                grid-template-columns: 80px 1fr; 
+            }
+
+            .left-sidebar .nav-links a span {
+                display: none; 
+            }
+
+            .left-sidebar .nav-links a {
+                justify-content: center;
+                padding: 10px 0;
+            }
+
+            .left-sidebar .nav-links a i {
+                margin-right: 0;
+            }
+
+            .left-sidebar .logo {
+                text-align: center;
+            }
+
+            .left-sidebar .logo img {
+                max-width: 50px;
+            }
+
+            .left-sidebar .profile-card {
+                display: none; 
+            }
+
+            .left-sidebar .nav-links li:last-child a i {
+                margin-right: 0; 
+            }
+
+            .form-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .form-row .field-label {
+                min-width: auto;
+            }
+
+            .form-row input,
+            .form-row textarea {
+                width: 100%;
+            }
+
+            .form-row .edit-btn {
+                align-self: flex-end;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-container {
+                grid-template-columns: 1fr; 
+                box-shadow: none; 
+            }
+
+            body {
+                padding: 0;
+                background-color: #fff; 
+            }
+
+            .left-sidebar {
+                border-right: none;
+                padding: 15px;
+                flex-direction: row; 
+                align-items: center;
+                justify-content: space-between;
+                border-bottom: 1px solid #eee;
+            }
+
+            .left-sidebar .logo {
+                margin-bottom: 0;
+            }
+
+            .left-sidebar .nav-links {
+                display: none; 
+            }
+
+            .left-sidebar .profile-card {
+                display: none;
+            }
+
+            .left-sidebar .logo img {
+                max-width: 80px;
+            }
+
+            .main-content {
+                padding: 20px;
+            }
+
+            .form-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+
+            .form-row .field-label,
+            .form-row .colon {
+                display: none;
+            }
+
+            .form-row input,
+            .form-row textarea {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="left-sidebar">
+            <div class="logo">
+                <img src="logo_nujo2.png" alt="NuJo Logo">
+            </div>
+            <ul class="nav-links">
+                <li><a href="home page.html"><i class="fas fa-home"></i> <span>Home</span></a></li>
+                <li><a href="notif page.html"><i class="fas fa-bell"></i> <span>Notifications</span></a></li>
+                <li><a href="message page.html"><i class="fas fa-envelope"></i> <span>Messages</span></a></li>
+                <li><a href="post page.html"><i class="fas fa-image"></i> <span>Post</span></a></li>
+                <li><a href="newpost.html"><i class="fas fa-plus"></i> <span>New Post</span></a></li>
+            </ul>
+            <div class="profile-card">
+                <img src="imgprofil.png" alt="Floyd Miles">
+                <div class="profile-info">
+                    <h4>Floyd Miles</h4>
+                    <p>@FloydMiles</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="profile-header">
+                <h1>Profile</h1>
+            </div>
+
+            <form class="edit-form" id="editProfileForm">
+                <div class="form-group">
+                    <div class="form-row">
+                        <span class="field-label">Username</span>
+                        <span class="colon">:</span>
+                        <input type="text" id="username" value="Floyd Miles" placeholder="Username">
+                        <button type="button" class="edit-btn" onclick="editField('username')">Edit</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <span class="field-label">Password</span>
+                        <span class="colon">:</span>
+                        <div class="password-field" style="flex: 1;">
+                            <input type="password" id="password" value="********" placeholder="Password">
+                            <i class="fas fa-eye toggle-password" onclick="togglePassword()"></i>
+                        </div>
+                        <button type="button" class="edit-btn" onclick="editField('password')">Edit</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <span class="field-label">Email</span>
+                        <span class="colon">:</span>
+                        <input type="email" id="email" value="floydmiles@gmail.com" placeholder="Email">
+                        <button type="button" class="edit-btn" onclick="editField('email')">Edit</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <span class="field-label">Location</span>
+                        <span class="colon">:</span>
+                        <input type="text" id="location" value="Indonesia" placeholder="Location">
+                        <button type="button" class="edit-btn" onclick="editField('location')">Edit</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <span class="field-label">Favorite Destination</span>
+                        <span class="colon">:</span>
+                        <input type="text" id="favDestination" value="Bali" placeholder="Favorite Destination">
+                        <button type="button" class="edit-btn" onclick="editField('favDestination')">Edit</button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-row">
+                        <span class="field-label">Bio</span>
+                        <span class="colon">:</span>
+                        <textarea id="bio" placeholder="Tell us about yourself">Hello My name is Floyd Miles</textarea>
+                        <button type="button" class="edit-btn" onclick="editField('bio')">Edit</button>
+                    </div>
+                </div>
+
+                <button type="submit" class="save-btn">Save</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        window.addEventListener('load', function() {
+            const savedProfile = JSON.parse(localStorage.getItem('userProfile'));
+            
+            if (savedProfile) {
+                document.getElementById('username').value = savedProfile.username || 'Floyd Miles';
+                document.getElementById('email').value = savedProfile.email || 'floydmiles@gmail.com';
+                document.getElementById('location').value = savedProfile.location || 'Indonesia';
+                document.getElementById('favDestination').value = savedProfile.favDestination || 'Bali';
+                document.getElementById('bio').value = savedProfile.bio || 'Hello My name is Floyd Miles';
+            }
+        });
+
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.querySelector('.toggle-password');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            }
+        }
+
+        function editField(fieldId) {
+            const field = document.getElementById(fieldId);
+            field.focus();
+            field.select();
+        }
+
+        document.getElementById('editProfileForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const formData = {
+                username: document.getElementById('username').value,
+                email: document.getElementById('email').value,
+                location: document.getElementById('location').value,
+                favDestination: document.getElementById('favDestination').value,
+                bio: document.getElementById('bio').value,
+                age: '18 years old' // Keep age static for now
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('userProfile', JSON.stringify(formData));
+            
+            // Show success message
+            alert('Profile updated successfully!');
+            console.log('Updated profile data:', formData);
+            
+            // Redirect back to profile page after short delay
+            setTimeout(function() {
+                window.location.href = 'profile.html';
+            }, 500);
+        });
+    </script>
+</body>
+</html>
