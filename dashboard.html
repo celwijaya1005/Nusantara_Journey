@@ -12,7 +12,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        
+
 
         html, body {
             height: 100%;
@@ -54,10 +54,19 @@
             flex-shrink: 0;
         }
 
-        .left-sidebar .logo h2 {
-            color: #00cba3;
-            font-size: 2rem;
-            font-weight: 700;
+        .left-sidebar .logo a {
+            display: block;
+            text-decoration: none;
+        }
+
+        .left-sidebar .logo img {
+            width: 120px;
+            height: auto;
+            transition: transform 0.2s ease;
+        }
+
+        .left-sidebar .logo a:hover img {
+            transform: scale(1.05);
         }
 
         .left-sidebar .nav-links {
@@ -353,7 +362,9 @@
     <div class="dashboard-container">
         <div class="left-sidebar">
             <div class="logo">
-                <h2>NUJO</h2>
+                <a href="home page.html">
+                    <img src="logo_nujo2.png" alt="NuJo Logo">
+                </a>
             </div>
             <ul class="nav-links">
                 <li><a href="dashboard.html" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
