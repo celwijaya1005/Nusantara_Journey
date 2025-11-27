@@ -199,6 +199,56 @@
             color: inherit;
         }
 
+        /* NEW CSS FOR FILTER DROPDOWN */
+        .filter-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .filter-dropdown {
+            display: none; /* Sembunyikan secara default */
+            position: absolute;
+            right: 0;
+            top: 55px; /* Posisikan di bawah ikon */
+            background-color: #fff;
+            min-width: 160px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            overflow: hidden;
+            z-index: 500;
+            padding: 10px 0;
+            animation: slideDown 0.2s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .filter-dropdown a {
+            color: #333;
+            padding: 10px 20px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.95rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .filter-dropdown a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .filter-dropdown a.active {
+            background-color: #00cba3;
+            color: #fff;
+        }
+
+        .filter-icon.active {
+            background-color: #00cba3;
+            color: #fff;
+        }
+        /* END NEW CSS */
+
         .post-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -751,13 +801,22 @@
         <div class="main-content">
             <div class="main-content-header">
                 <h2>Post</h2>
-                <div class="filter-icon">
-                    <i class="fas fa-sliders-h"></i>
+                <div class="filter-container">
+                    <div class="filter-icon" id="filterIcon">
+                        <i class="fas fa-sliders-h"></i>
+                    </div>
+                    <div class="filter-dropdown" id="filterDropdown">
+                        <a href="#" class="filter-item active" data-filter="all">Semua</a>
+                        <a href="#" class="filter-item" data-filter="budaya">Budaya</a>
+                        <a href="#" class="filter-item" data-filter="alam">Alam & Travel</a>
+                        <a href="#" class="filter-item" data-filter="kuliner">Kuliner</a>
+                        <a href="#" class="filter-item" data-filter="lain">Lainnya</a>
+                    </div>
                 </div>
-            </div>
+                </div>
 
             <div class="post-grid">
-                <div class="post-item" data-post-index="0">
+                <div class="post-item" data-post-index="0" data-category="budaya">
                     <img src="https://images.unsplash.com/photo-1555400038-63f5ba517a47?w=400&h=600&fit=crop" alt="Indonesian Culture 1">
                     <div class="post-overlay">
                         <div class="post-user-info">
@@ -780,7 +839,7 @@
                     </div>
                 </div>
 
-                <div class="post-item" data-post-index="1">
+                <div class="post-item" data-post-index="1" data-category="alam">
                     <img src="https://images.unsplash.com/photo-1596422846543-75c6fc197f07?w=400&h=600&fit=crop" alt="Borobudur Temple">
                     <div class="post-overlay">
                         <div class="post-user-info">
@@ -803,7 +862,7 @@
                     </div>
                 </div>
 
-                <div class="post-item" data-post-index="2">
+                <div class="post-item" data-post-index="2" data-category="budaya">
                     <img src="https://images.unsplash.com/photo-1570789210967-2cac24afeb00?w=400&h=600&fit=crop" alt="Indonesian Temple">
                     <div class="post-overlay">
                         <div class="post-user-info">
@@ -826,7 +885,7 @@
                     </div>
                 </div>
 
-                <div class="post-item" data-post-index="3">
+                <div class="post-item" data-post-index="3" data-category="alam">
                     <img src="https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?w=400&h=600&fit=crop" alt="Bali Temple">
                     <div class="post-overlay">
                         <div class="post-user-info">
@@ -849,7 +908,7 @@
                     </div>
                 </div>
 
-                <div class="post-item" data-post-index="4">
+                <div class="post-item" data-post-index="4" data-category="budaya">
                     <img src="https://images.unsplash.com/photo-1588668214407-6ea9a6d8c272?w=400&h=600&fit=crop" alt="Prambanan">
                     <div class="post-overlay">
                         <div class="post-user-info">
@@ -872,7 +931,7 @@
                     </div>
                 </div>
 
-                <div class="post-item" data-post-index="5">
+                <div class="post-item" data-post-index="5" data-category="budaya">
                     <img src="https://images.unsplash.com/photo-1518548419970-58e3b4079ab2?w=400&h=600&fit=crop" alt="Indonesian Culture 2">
                     <div class="post-overlay">
                         <div class="post-user-info">
@@ -895,7 +954,7 @@
                     </div>
                 </div>
 
-                <div class="post-item" data-post-index="6">
+                <div class="post-item" data-post-index="6" data-category="budaya">
                     <img src="https://images.unsplash.com/photo-1559628376-f3fe5f782a2e?w=400&h=600&fit=crop" alt="Traditional Dance">
                     <div class="post-overlay">
                         <div class="post-user-info">
@@ -918,7 +977,7 @@
                     </div>
                 </div>
 
-                <div class="post-item" data-post-index="7">
+                <div class="post-item" data-post-index="7" data-category="alam">
                     <img src="https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=600&fit=crop" alt="Indonesian Statue">
                     <div class="post-overlay">
                         <div class="post-user-info">
@@ -935,15 +994,12 @@
                             </div>
                             <div class="interaction-item">
                                 <i class="fas fa-comment"></i>
-                                <function_calls>
-                           <div class="interaction-item">
-                                <i class="fas fa-comment"></i>
                                 <span class="comment-count">267</span>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                </div>
         </div>
     </div>
     
@@ -964,8 +1020,7 @@
                 <div id="modalCaption" class="modal-caption"></div>
                 
                 <div class="modal-comments-section" id="modalCommentsSection">
-                    <!-- Comments will be loaded here -->
-                </div>
+                    </div>
                 
                 <div class="modal-interactions">
                     <div class="modal-interaction-items">
@@ -1368,15 +1423,6 @@
             }
         });
 
-        // Filter icon animation
-        const filterIcon = document.querySelector('.filter-icon');
-        filterIcon.addEventListener('click', function() {
-            this.style.transform = 'rotate(180deg) scale(0.9)';
-            setTimeout(() => {
-                this.style.transform = 'rotate(0deg) scale(1)';
-            }, 300);
-        });
-
         // Nav links animation
         document.querySelectorAll('.nav-links a').forEach(link => {
             link.addEventListener('click', function(e) {
@@ -1425,6 +1471,70 @@
         document.querySelectorAll('.post-item img').forEach(img => {
             imageObserver.observe(img);
         });
+
+        // START: Filter Logic (New JavaScript)
+        const filterIcon = document.getElementById('filterIcon');
+        const filterDropdown = document.getElementById('filterDropdown');
+        const filterItems = document.querySelectorAll('.filter-item');
+        const postItems = document.querySelectorAll('.post-item');
+
+        // 1. Toggle (Tampilkan/Sembunyikan) Dropdown Filter
+        filterIcon.addEventListener('click', (e) => {
+            e.stopPropagation(); // Mencegah event mencapai document click
+            // Toggle display antara 'block' dan 'none'
+            if (filterDropdown.style.display === 'block') {
+                filterDropdown.style.display = 'none';
+                filterIcon.classList.remove('active');
+            } else {
+                filterDropdown.style.display = 'block';
+                filterIcon.classList.add('active');
+            }
+            
+            // Animasi ikon
+            filterIcon.style.transform = 'rotate(180deg) scale(0.9)';
+            setTimeout(() => {
+                filterIcon.style.transform = 'rotate(0deg) scale(1)';
+            }, 300);
+        });
+
+        // 2. Tutup dropdown saat mengklik di luar area filter
+        document.addEventListener('click', (e) => {
+            // Cek apakah klik berasal dari luar filterIcon dan filterDropdown
+            if (filterDropdown && filterDropdown.style.display === 'block' && !filterIcon.contains(e.target) && !filterDropdown.contains(e.target)) {
+                filterDropdown.style.display = 'none';
+                filterIcon.classList.remove('active');
+            }
+        });
+
+
+        // 3. Logika Utama Filter
+        filterItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const filterValue = this.getAttribute('data-filter');
+
+                // Perbarui status 'active' pada tombol filter
+                filterItems.forEach(i => i.classList.remove('active'));
+                this.classList.add('active');
+
+                // Tampilkan/Sembunyikan postingan berdasarkan filterValue
+                postItems.forEach(post => {
+                    const postCategory = post.getAttribute('data-category');
+                    
+                    // Jika filter adalah 'all' ATAU kategori postingan cocok dengan filter yang dipilih
+                    if (filterValue === 'all' || postCategory === filterValue) {
+                        post.style.display = 'block'; // Tampilkan post
+                    } else {
+                        post.style.display = 'none'; // Sembunyikan post
+                    }
+                });
+
+                // Sembunyikan dropdown setelah filter dipilih
+                filterDropdown.style.display = 'none';
+                filterIcon.classList.remove('active');
+            });
+        });
+        // END: Filter Logic
     </script>
 
 </body>
